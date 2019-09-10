@@ -1,6 +1,7 @@
 # DepositfilesSDK
 DepositfilesSDK is a .Net library for Depositfiles.com file hosting service.
-
+.net framework 4.5.2
+.net standard 2.0
 
 `Download`
 [https://github.com/jamesheck2019/DepositfilesSDK/releases](https://github.com/jamesheck2019/DepositfilesSDK/releases)<br>
