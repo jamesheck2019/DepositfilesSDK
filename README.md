@@ -4,10 +4,12 @@ DepositfilesSDK is a .Net library for Depositfiles.com file hosting service.<br>
 .net standard 2.0<br>
 <br>
 <br>
+
 `Download`
 [https://github.com/jamesheck2019/DepositfilesSDK/releases](https://github.com/jamesheck2019/DepositfilesSDK/releases)<br>
+`NuGet:`
+[![NuGet](https://img.shields.io/nuget/v/DeQmaTech.DepositfilesSDK.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/DeQmaTech.DepositfilesSDK)<br>
 
-[![NuGet version (BlackBeltCoder.Silk)](https://img.shields.io/nuget/v/DeQmaTech.DepositfilesSDK.svg?style=plastic)](https://www.nuget.org/packages/DeQmaTech.DepositfilesSDK/)
 
 # List of functions:
 * GetToken
@@ -42,6 +44,11 @@ DepositfilesSDK is a .Net library for Depositfiles.com file hosting service.<br>
 **set client**
 ```vb
 Dim cLENT as DepositfilesSDK.IClient = New DepositfilesSDK.DClient("USER", "PASS", Nothing)
+```
+**set client with proxy**
+```vb
+Dim m_proxy = New DepositfilesSDK.ProxyConfig With {.SetProxy = True, .ProxyIP = "172.0.0.0", .ProxyPort = 80, .ProxyUsername = "usr", .ProxyPassword = "pas"}
+Dim cLENT as DepositfilesSDK.IClient = New DepositfilesSDK.DClient("USER", "PASS", Nothing, m_proxy)
 ```
 **list root files/folders**
 ```vb
