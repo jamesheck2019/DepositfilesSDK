@@ -1,15 +1,20 @@
-# DepositfilesSDK
-DepositfilesSDK is a .Net library for Depositfiles.com file hosting service.<br>
-.net framework 4.5.2<br>
-.net standard 2.0<br>
-<br>
-<br>
+## DepositfilesSDK
+
+
 
 `Download`
 [https://github.com/jamesheck2019/DepositfilesSDK/releases](https://github.com/jamesheck2019/DepositfilesSDK/releases)<br>
 `NuGet:`
 [![NuGet](https://img.shields.io/nuget/v/DeQmaTech.DepositfilesSDK.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/DeQmaTech.DepositfilesSDK)<br>
 
+**Features**
+
+* Assemblies for .NET 4.5.2 and .NET Standard 2.0 and .NET Core 2.1
+* Just one external reference (Newtonsoft.Json)
+* Easy installation using NuGet
+* Upload/Download tracking support
+* Proxy Support
+* Upload/Download cancellation support
 
 # List of functions:
 * GetToken
@@ -41,39 +46,77 @@ DepositfilesSDK is a .Net library for Depositfiles.com file hosting service.<br>
 
 
 # Code simple:
-**set client**
 ```vb
-Dim cLENT as DepositfilesSDK.IClient = New DepositfilesSDK.DClient("USER", "PASS", Nothing)
+    Sub SetClient()
+        Dim MyClient As DepositfilesSDK.IClient = New DepositfilesSDK.DClient("usern", "passw")
+    End Sub
 ```
-**set client with proxy**
 ```vb
-Dim m_proxy = New DepositfilesSDK.ProxyConfig With {.SetProxy = True, .ProxyIP = "172.0.0.0", .ProxyPort = 80, .ProxyUsername = "usr", .ProxyPassword = "pas"}
-Dim cLENT as DepositfilesSDK.IClient = New DepositfilesSDK.DClient("USER", "PASS", Nothing, m_proxy)
+    Sub SetClientWithOptions()
+        Dim Optians As New DepositfilesSDK.ConnectionSettings With {.CloseConnection = True, .TimeOut = TimeSpan.FromMinutes(30), .Proxy = New DepositfilesSDK.ProxyConfig With {.ProxyIP = "172.0.0.0", .ProxyPort = 80, .ProxyUsername = "myname", .ProxyPassword = "myPass", .SetProxy = True}}
+        Dim MyClient As DepositfilesSDK.IClient = New DepositfilesSDK.DClient("access token", Optians)
+    End Sub
 ```
-**list root files/folders**
 ```vb
-Dim RSLT = Await cLENT.ListFiles()
-For Each fold In RSLT.FilesList
-    DataGridView1.Rows.Add(fold.Value.filename, fold.Value.file_id, (fold.Value.size))
-Next
-
-Dim RSLT = Await cLENT.ListFolders()
-For Each fold In RSLT.data
-    DataGridView1.Rows.Add(fold.name, fold.folder_id, fold.FilesCount)
-Next
+    Async Sub ListMyFilesAndFolders()
+        Dim result = Await MyClient.List("")
+        For Each vid In result.FilesList
+            DataGridView1.Rows.Add(vid.Value.filename, vid.Value.DownloadCount, vid.Value.FileUrl, vid.Value.file_id)
+        Next
+        ''list files
+        Dim resultF = Await MyClient.ListFiles()
+        ''list folders
+        Dim resultD = Await MyClient.ListFolders()
+    End Sub
 ```
-**upload local file (without progress tracking)**
-```vb.net
-Dim UploadCancellationToken As New Threading.CancellationTokenSource()
-Dim RSLT = Await cLENT.Upload("C:\ureWiz.png", UploadTypes.FilePath, "ureWiz.png", Nothing, nothing, UploadCancellationToken.Token)
+```vb
+    Async Sub CreateNewFolder()
+        Dim result = Await MyClient.CreateNewFolder("folder name")
+    End Sub
 ```
-**upload local file with progress tracking**
-```vb.net
-Dim UploadCancellationToken As New Threading.CancellationTokenSource()
-Dim prog_ReportCls As New Progress(Of MediafireSDK.ReportStatus)(Sub(ReportClass As MediafireSDK.ReportStatus)
-                   Label1.Text = String.Format("{0}/{1}", (ReportClass.BytesTransferred), (ReportClass.TotalBytes))
-                   ProgressBar1.Value = CInt(ReportClass.ProgressPercentage)
-                   Label2.Text = CStr(ReportClass.TextStatus)
-                   End Sub)
-Dim RSLT = Clnt.UploadLocalFile("C:\ureWiz.png", UploadTypes.FilePath, "ureWiz.png",Nothing, prog_ReportCls , UploadCancellationToken.Token)
+```vb
+    Async Sub LockFile()
+        Dim result = Await MyClient.LockFile("file id", "pass1234")
+    End Sub
+```
+```vb
+    Async Sub MoveFile()
+        Dim result = Await MyClient.MoveFile("file id", "to folder id")
+    End Sub
+```
+```vb
+    Async Sub DeleteAFileOrFolder()
+        Dim result = Await MyClient.DeleteFile("file id")
+        Dim resultd = Await MyClient.DeleteFolder("folder id")
+    End Sub
+```
+```vb
+    Async Sub RenameFileOrFolder()
+        Dim result = Await MyClient.RenameFile("file id", "new name")
+        Dim resultD = Await MyClient.RenameFolder("folder id", "new name")
+    End Sub
+```
+```vb
+    Async Sub VideoDirectUrl()
+        Dim result = Await MyClient.Search("stre", SearchTypeEnum.Contains)
+        For Each vid In result
+            DataGridView1.Rows.Add(vid.filename, vid.DownloadCount, vid.FileUrl, vid.file_id)
+        Next
+    End Sub
+```
+```vb
+    Async Sub Upload_Remote()
+        Dim result = Await MyClient.RemoteUpload("https://www.tube.com/video.mp4")
+    End Sub
+```
+```vb
+    Async Sub Upload_Local_WithProgressTracking()
+        Dim UploadCancellationToken As New Threading.CancellationTokenSource()
+        Dim _ReportCls As New Progress(Of DepositfilesSDK.ReportStatus)(Sub(ReportClass As DepositfilesSDK.ReportStatus)
+                                                                            Label1.Text = String.Format("{0}/{1}", (ReportClass.BytesTransferred), (ReportClass.TotalBytes))
+                                                                            ProgressBar1.Value = CInt(ReportClass.ProgressPercentage)
+                                                                            Label2.Text = CStr(ReportClass.TextStatus)
+                                                                        End Sub)
+        Dim RSLT = Await MyClient.Upload("J:\DB\myvideo.mp4", UploadTypes.FilePath, "myvideo.mp4", "folder id", _ReportCls, UploadCancellationToken.Token)
+    End Sub
 ```
