@@ -1,7 +1,6 @@
 ## DepositfilesSDK
 
 
-
 `Download`
 [https://github.com/jamesheck2019/DepositfilesSDK/releases](https://github.com/jamesheck2019/DepositfilesSDK/releases)<br>
 `NuGet:`
@@ -47,76 +46,32 @@
 
 # Code simple:
 ```vb
-    Sub SetClient()
-        Dim MyClient As DepositfilesSDK.IClient = New DepositfilesSDK.DClient("usern", "passw")
-    End Sub
-```
-```vb
-    Sub SetClientWithOptions()
-        Dim Optians As New DepositfilesSDK.ConnectionSettings With {.CloseConnection = True, .TimeOut = TimeSpan.FromMinutes(30), .Proxy = New DepositfilesSDK.ProxyConfig With {.ProxyIP = "172.0.0.0", .ProxyPort = 80, .ProxyUsername = "myname", .ProxyPassword = "myPass", .SetProxy = True}}
-        Dim MyClient As DepositfilesSDK.IClient = New DepositfilesSDK.DClient("access token", Optians)
-    End Sub
-```
-```vb
-    Async Sub ListMyFilesAndFolders()
-        Dim result = Await MyClient.List("")
-        For Each vid In result.FilesList
-            DataGridView1.Rows.Add(vid.Value.filename, vid.Value.DownloadCount, vid.Value.FileUrl, vid.Value.file_id)
-        Next
-        ''list files
-        Dim resultF = Await MyClient.ListFiles()
-        ''list folders
-        Dim resultD = Await MyClient.ListFolders()
-    End Sub
-```
-```vb
-    Async Sub CreateNewFolder()
-        Dim result = Await MyClient.CreateNewFolder("folder name")
-    End Sub
-```
-```vb
-    Async Sub LockFile()
-        Dim result = Await MyClient.LockFile("file id", "pass1234")
-    End Sub
-```
-```vb
-    Async Sub MoveFile()
-        Dim result = Await MyClient.MoveFile("file id", "to folder id")
-    End Sub
-```
-```vb
-    Async Sub DeleteAFileOrFolder()
-        Dim result = Await MyClient.DeleteFile("file id")
-        Dim resultd = Await MyClient.DeleteFolder("folder id")
-    End Sub
-```
-```vb
-    Async Sub RenameFileOrFolder()
-        Dim result = Await MyClient.RenameFile("file id", "new name")
-        Dim resultD = Await MyClient.RenameFolder("folder id", "new name")
-    End Sub
-```
-```vb
-    Async Sub VideoDirectUrl()
-        Dim result = Await MyClient.Search("stre", SearchTypeEnum.Contains)
-        For Each vid In result
-            DataGridView1.Rows.Add(vid.filename, vid.DownloadCount, vid.FileUrl, vid.file_id)
-        Next
-    End Sub
-```
-```vb
-    Async Sub Upload_Remote()
-        Dim result = Await MyClient.RemoteUpload("https://www.tube.com/video.mp4")
-    End Sub
-```
-```vb
-    Async Sub Upload_Local_WithProgressTracking()
-        Dim UploadCancellationToken As New Threading.CancellationTokenSource()
-        Dim _ReportCls As New Progress(Of DepositfilesSDK.ReportStatus)(Sub(ReportClass As DepositfilesSDK.ReportStatus)
-                                                                            Label1.Text = String.Format("{0}/{1}", (ReportClass.BytesTransferred), (ReportClass.TotalBytes))
-                                                                            ProgressBar1.Value = CInt(ReportClass.ProgressPercentage)
-                                                                            Label2.Text = CStr(ReportClass.TextStatus)
-                                                                        End Sub)
-        Dim RSLT = Await MyClient.Upload("J:\DB\myvideo.mp4", UploadTypes.FilePath, "myvideo.mp4", "folder id", _ReportCls, UploadCancellationToken.Token)
-    End Sub
+Dim cLENT As DepositfilesSDK.IClient = New DepositfilesSDK.DClient("username", "password", Nothing)
+
+Await cLENT.UserInfo
+Await cLENT.Root.CreateNewFolder("new folder")
+Await cLENT.Root.ListFiles
+Await cLENT.Root.ListFolders
+Await cLENT.Root.SearchFiles("emy", SearchTypeEnum.Contains)
+
+Await cLENT.Folders("folder_id").Delete
+Await cLENT.Folders("folder_id").DeleteParentWithoutSubs
+Await cLENT.Folders("folder_id").ListFiles
+Await cLENT.Folders("folder_id").Rename("new name")
+Await cLENT.Folders("folder_id").SearchFolder("emy", 0)
+Dim cts As New Threading.CancellationTokenSource()
+Dim _ReportCls As New Progress(Of DepositfilesSDK.ReportStatus)(Sub(ReportClass As DepositfilesSDK.ReportStatus) Console.WriteLine(String.Format("{0} - {1}% - {2}", String.Format("{0}/{1}", (ReportClass.BytesTransferred), (ReportClass.TotalBytes)), CInt(ReportClass.ProgressPercentage), ReportClass.TextStatus)))
+Await cLENT.Folders("folder_id").Upload("c:\\myvid.mp4", UploadTypes.FilePath, "myvid.mp4", _ReportCls, cts.Token)
+Await cLENT.Folders("folder_id").RemoteUpload(New Uri("https://domain.com/wat.mp4"))
+Await cLENT.Folders("folder_id").RemoteUploadMultiple(New String() {"https://domain.com/wat.mp4", "https://domain.com/wat.mp4"})
+
+Await cLENT.Files("file_id").Delete
+Await cLENT.Files(Nothing).DeleteMultiple(New String() {"file_id", "file_id"})
+Await cLENT.Files("file_id").GetDownloadToken
+Await cLENT.Files("file_id").GetThumb
+Await cLENT.Files("file_id").Lock("12345")
+Await cLENT.Files("file_id").Unlock
+Await cLENT.Files("file_id").Move("folder_id")
+Await cLENT.Files(Nothing).MoveMultiple(New String() {"file_id", "file_id"}, "folder_id")
+Await cLENT.Files("file_id").Rename("new name")
 ```
