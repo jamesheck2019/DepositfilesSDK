@@ -5,6 +5,9 @@
 [https://github.com/jamesheck2019/DepositfilesSDK/releases](https://github.com/jamesheck2019/DepositfilesSDK/releases)<br>
 `NuGet:`
 [![NuGet](https://img.shields.io/nuget/v/DeQmaTech.DepositfilesSDK.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/DeQmaTech.DepositfilesSDK)<br>
+`Help:`
+[https://github.com/jamesheck2019/DepositfilesSDK/wiki](https://github.com/jamesheck2019/DepositfilesSDK/wiki)<br>
+
 
 **Features**
 
@@ -42,6 +45,9 @@
 * Upload
 * RemoteUpload
 
+
+# CodeMap:
+![codemap](http://www.mediafire.com/convkey/67b704c1/wqb4vcjjn1fqr0wzg.jpg)
 
 
 # Code simple:
