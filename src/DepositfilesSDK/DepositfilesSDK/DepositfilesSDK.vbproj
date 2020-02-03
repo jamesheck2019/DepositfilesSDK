@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>DepositfilesSDK is a .Net library for Depositfiles.com file hosting service.</Description>
+    <Copyright>Copyright © 2019 DeQmaTech LLC.</Copyright>
+    <AssemblyTitle>DepositfilesSDK</AssemblyTitle>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <VersionPrefix>1.4.0</VersionPrefix>
+    <Title>DepositfilesSDK</Title>
+    <Authors>DeQmaTech LLC.</Authors>
+    <AssemblyName>DepositfilesSDK</AssemblyName>
+    <PackageProjectUrl>https://github.com/jamesheck2019/DepositfilesSDK</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/jamesheck2019/DepositfilesSDK/LICENSE</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>Depositfiles;netstandard;cloud-storage</PackageTags>
+    <RepositoryUrl>https://github.com/jamesheck2019/DepositfilesSDK</RepositoryUrl>
+    <PackageIcon>icon_64x64.png</PackageIcon>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <RootNamespace>DepositfilesSDK</RootNamespace>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.1;net452</TargetFrameworks>
+    <PackageId>DeQmaTech.DepositfilesSDK</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+<ItemGroup>
+  <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
+  <!--<PackageReference Include="System.Net.Http" Version="4.3.3" />-->
+</ItemGroup>
+
+</Project>
