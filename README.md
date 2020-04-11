@@ -59,7 +59,7 @@
 
 
 # Code simple:
-```csharp
+```vb
 'first get auth token
 Dim tokn = Await DepositfilesSDK.Authentication.GetToken("user", "pass")
 Dim cLENT As DepositfilesSDK.IClient = New DepositfilesSDK.DClient(tokn.data.token)
